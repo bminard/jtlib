@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------------
-# jtlib: test_jt.py
+# jtlib: test_project.py
 #
-# Test file for package console and script entry point.
+# Test code for the project module.
 #--------------------------------------------------------------------------------
 # BSD 2-Clause License
 #
@@ -33,69 +33,52 @@
 
 from click.testing import CliRunner
 import click
-import pkg_resources
-import pytest
-import subprocess
 import jtlib
+import pytest
 
 
-
-
-def check_call(*args):
-    """Verify script return code.
-
-    Args:
-        args: rbt command-line arguments
-
-    Returns:
-        RBT return code.
-
-    Raises:
-        CalledProcessError: whenever the subprocess cannot be properly envoked.
-    """
-    try:
-        return subprocess.check_call(list(args))
-    except subprocess.CalledProcessError as e:
-        return e.returncode
-
-
-def check_output(*args):
-    """Verify script text output.
-
-    Args:
-        args: rbt command-line arguments
-
-    Returns:
-        RBT return code.
-
-    Raises:
-        CalledProcessError: whenever the subprocess cannot be properly envoked.
-    """
-    try:
-        return subprocess.check_output(list(args))
-    except subprocess.CalledProcessError as e:
-        return e.returncode
-
-
-scripts = [ pkg_resources.resource_filename(__name__, "jt.py"), ]
-
-
-@pytest.mark.parametrize("script", scripts)
-def test_script_subcommand_no_options(script):
-    """Basic validation of script without any command-line options."""
-    assert 0 == check_call(script), "expected zero return code"
-
-
-def test_main_without_url_argument():
-    """Check main command when no server URL argument is provided."""
-    runner = CliRunner()
-    result = runner.invoke(jtlib.scripts.jt)
+def test_projects_valid_url_argument(runner, context):
+    """Check project group command result for a JIRA server."""
+    result = runner.invoke(jtlib.scripts.jt, [ 'https://jira.atlassian.com', 'projects', ], obj = context)
     assert 0 == result.exit_code
+    assert 'CLOUD' in result.output
+
+
+command_list = [
+    'project',
+]
+
+@pytest.fixture(scope = 'module', params = command_list)
+def command(request):
+    return request.param
+
+
+def test_command_with_missing_project(runner, context, server_url, command):
+    """Check command without specifying a project."""
+    result = runner.invoke(jtlib.scripts.jt, [ server_url, command ], obj = context)
+    assert 2 == result.exit_code
     assert 'Usage:' in result.output
 
 
-def test_main_with_invalid_url_argument(runner, context, server_url):
-    """Check main command when an invalid server URL argument is provided."""
-    result = runner.invoke(jtlib.scripts.jt, [ server_url ], obj = context)
+bad_project_list = [
+    'CLOUDY', # Nonexistant project, match project key regular expression.
+    '123', # Malformed project name.
+]
+
+@pytest.fixture(scope = 'module', params = bad_project_list)
+def bad_project(request):
+    return request.param
+
+
+def test_command_with_nonexistent_project(runner, context, server_url, command, bad_project):
+    """Check command specifying a nonexistant project."""
+    result = runner.invoke(jtlib.scripts.jt, [ server_url, command, bad_project ], obj = context)
+    assert 2 == result.exit_code
+    assert 'Usage:' in result.output
+
+
+def test_command_invalid_url_argument(runner, context, command):
+    """Check project group command result for a server."""
+    result = runner.invoke(jtlib.scripts.jt, [ 'https://www.example.com', command ], obj = context)
     assert 2 == result.exit_code
     assert 'Usage:' in result.output

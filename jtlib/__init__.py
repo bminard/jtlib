@@ -31,4 +31,7 @@
 #--------------------------------------------------------------------------------
 
 
+from client import *
+from issue import *
+from projects import *
 from scripts import *

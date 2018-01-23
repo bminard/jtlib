@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 #--------------------------------------------------------------------------------
-# jtlib: jt.py
+# jtlib: conftest.py
 #
-# Entry point for jtlib command-line tool.
+# Common test code for jtlib.
 #--------------------------------------------------------------------------------
 # BSD 2-Clause License
 #
@@ -32,30 +31,40 @@
 #--------------------------------------------------------------------------------
 
 
+from click.testing import CliRunner
 import click
-import jtlib
+import pytest
 
 
-class CatchExceptions(click.Group):
-    """Global exception handler for group commands."""
-    def __call__(self, *args, **kwargs):
-        try:
-            return self.main(*args, **kwargs)
-        except Exception as excinfo:
-            click.echo(str(excinfo))
-            click.echo("Usage information available using the --help option.")
+@pytest.fixture(scope = 'module')
+def runner():
+    """Return an instance of Click's command-line runner method."""
+    return CliRunner()
 
 
-@click.group(cls = CatchExceptions)
-@click.argument('jira_server_url')
-@click.pass_context
-def jt(ctx, jira_server_url):
-    ctx.obj['jira client'] = jtlib.client.Jira(jira_server_url)
+@pytest.fixture(scope = 'module')
+def context():
+    """Return an instance of the JIRA tool context."""
+    return dict()
 
 
-jt.add_command(jtlib.projects.main, name = 'projects')
-jt.add_command(jtlib.issue.main, name = 'issue')
+url_list = [
+    'https://jira.atlassian.com',
+    'https://www.example.com',
+]
+
+@pytest.fixture(scope = "module", params = url_list)
+def server_url(request):
+    """Different server URLs."""
+    return request.param
 
 
-def main():
-    return jt(obj = {})
+command_list = [
+    'issue'
+    'project',
+]
+
+@pytest.fixture(scope = 'module', params = command_list)
+def command(request):
+    """Different JIRA tool commands."""
+    return request.param

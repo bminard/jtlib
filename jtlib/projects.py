@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 #--------------------------------------------------------------------------------
-# jtlib: jt.py
+# jtlib: projects.py
 #
-# Entry point for jtlib command-line tool.
+# Projects command interface for JIRA tool group.
 #--------------------------------------------------------------------------------
 # BSD 2-Clause License
 #
@@ -33,29 +32,13 @@
 
 
 import click
-import jtlib
+import jira
 
 
-class CatchExceptions(click.Group):
-    """Global exception handler for group commands."""
-    def __call__(self, *args, **kwargs):
-        try:
-            return self.main(*args, **kwargs)
-        except Exception as excinfo:
-            click.echo(str(excinfo))
-            click.echo("Usage information available using the --help option.")
-
-
-@click.group(cls = CatchExceptions)
-@click.argument('jira_server_url')
+@click.command()
 @click.pass_context
-def jt(ctx, jira_server_url):
-    ctx.obj['jira client'] = jtlib.client.Jira(jira_server_url)
-
-
-jt.add_command(jtlib.projects.main, name = 'projects')
-jt.add_command(jtlib.issue.main, name = 'issue')
-
-
-def main():
-    return jt(obj = {})
+def main(ctx):
+   """List all projects keys hosted on the server."""
+   for project in ctx.obj['jira client'].projects():
+       assert isinstance(project, jira.resources.Project)
+       click.echo(project.key)

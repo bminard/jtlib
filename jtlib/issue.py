@@ -43,12 +43,18 @@ project_key_regex = re.compile(r"""(?P<project_key>^[A-Z][A-Z]+)$""") # Default 
 issue_key_regex = re.compile(r"""(?P<issue_key>^[A-Z][A-Z]+-\d+)$""") # Default issue key for JIRA Server 7.1.
 
 
+def get_attribute_value(field, attribute):
+    """Recursively traverse the tuple list for accessing an attribute's value.
+    """
+    if types.TupleType == type(field):
+        return get_attribute_value(get_attribute_value(field[0], field[1]), attribute)
+    return getattr(field, attribute)
+
+
 def canonify_value(field, attribute):
     """Inject 'Not Available' value for nonexistent issue fields."""
     try:
-        if types.TupleType == type(field):
-            return canonify_value(getattr(field[0], field[1]), attribute)
-        return getattr(field, attribute).encode('ascii', errors='backslashreplace')
+        return get_attribute_value(field, attribute).encode('ascii', errors='backslashreplace')
     except (AttributeError, TypeError):
         return 'N/A'
 
@@ -63,10 +69,10 @@ def emit_issue_fields(ctx, issue_list):
         assert isinstance(item, jira.resources.Issue)
         issue = ctx.obj['jira client'].issue(item.key)
         writer.writerow(map(lambda x: canonify_value(*x), [ (issue, 'key'),
-            (issue.fields.issuetype, 'name'), (issue.fields.status, 'name'),
-            (issue.fields, 'summary'), (issue.fields, 'created'),
-            ((issue.fields, 'timetracking'), 'originalEstimate'),
-            ((issue.fields, 'timetracking'), 'remainingEstimate'),
+            (((issue, 'fields'), 'issuetype'), 'name'), (((issue, 'fields'), 'status'), 'name'),
+            ((issue, 'fields'), 'summary'), ((issue, 'fields'), 'created'),
+            (((issue, 'fields'), 'timetracking'), 'originalEstimate'),
+            (((issue, 'fields'), 'timetracking'), 'remainingEstimate'),
         ]))
 
 
@@ -80,7 +86,7 @@ def emit_worklog_fields(ctx, issue_list):
         assert isinstance(issue, jira.resources.Issue)
         for worklog in ctx.obj['jira client'].issue(issue.key).fields.worklog.worklogs:
             writer.writerow(map(lambda x: canonify_value(*x), [ (issue, 'key'),
-                (worklog.updateAuthor, 'name'), (worklog, 'started'),
+                ((worklog, 'updateAuthor'), 'name'), (worklog, 'started'),
                 (worklog, 'timeSpent'),
             ]))
 

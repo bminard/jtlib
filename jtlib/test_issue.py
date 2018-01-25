@@ -39,6 +39,31 @@ import pytest
 
 
 #
+# Handle get attribute value.
+#
+
+
+class A:
+    a = 1
+    class B:
+        b = 2
+        class C:
+            c = 3
+
+
+attribute_value_list = [
+  (A, 'a', 1),
+  ((A, 'B'), 'b', 2),
+  (((A, 'B'), 'C'), 'c', 3),
+]
+
+
+@pytest.mark.parametrize("attribute, value, expected", attribute_value_list)
+def test_get_attribute_value(attribute, value, expected):
+    assert issue.get_attribute_value(attribute, value) == expected
+
+
+#
 # Handle canonify method.
 #
 

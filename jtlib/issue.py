@@ -154,7 +154,8 @@ def main(ctx, key, since, until, worklog, order_by):
         order_by_clause = ' ORDER BY {}'.format(order_by)
     else:
         order_by_clause = ""
+    result_list = ctx.obj['jira client'].search(' AND '.join(clause) + order_by_clause)
     if worklog:
-        emit_worklog_fields(ctx, ctx.obj['jira client'].search(' AND '.join(clause) + order_by_clause))
+        emit_worklog_fields(ctx, result_list)
     else:
-        emit_issue_fields(ctx, ctx.obj['jira client'].search(' AND '.join(clause) + order_by_clause))
+        emit_issue_fields(ctx, result_list)

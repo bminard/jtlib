@@ -62,8 +62,8 @@ def canonify_value(field, attribute):
 def emit_issue_fields(ctx, issue_list):
     """Print top-level Policy Holder issue fields."""
     writer = csv.writer(sys.stdout)
-    writer.writerow([ 'issuekey', 'type', 'status', 'summary', 'created',
-        'original estimate', 'remaining estimate',
+    writer.writerow([ 'Issue key', 'Issue Type', 'Status', 'Summary', 'Created',
+        'Original Estimate', 'Remaining Estimate',
     ])
     for item in issue_list:
         assert isinstance(item, jira.resources.Issue)
@@ -79,8 +79,8 @@ def emit_issue_fields(ctx, issue_list):
 def emit_worklog_fields(ctx, issue_list):
     """Print worklog fields."""
     writer = csv.writer(sys.stdout)
-    writer.writerow([ 'issuekey', 'type', 'status', 'created', 'start time',
-        'time spent',
+    writer.writerow([ 'Issue key', 'Issue Type', 'Status', 'Created', 'Start Time',
+        'Time Spent',
     ])
     for issue in issue_list:
         assert isinstance(issue, jira.resources.Issue)

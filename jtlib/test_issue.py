@@ -169,7 +169,7 @@ def stride_project_result(runner, context):
 
 
 stride_project_output_list = [
-    'issuekey,type,status,summary,created,original estimate,remaining estimate',
+    'Issue key,Issue Type,Status,Summary,Created,Original Estimate,Remaining Estimate',
     'STRIDE-1786,Suggestion,To be reviewed,Google Calendar Integration,2018-01-01T19:53:30.305+0000,N/A,N/A',
     'STRIDE-1784,Suggestion,To be reviewed,Check post,2018-01-01T11:47:52.366+0000,N/A,N/A',
 ]
@@ -192,7 +192,7 @@ def test_issue_valid_url_argument_valid_project_valid_time_stamp_range(stride_pr
 
 
 trans_1871_output_list = [
-    'issuekey,type,status,summary,created,original estimate,remaining estimate',
+    'Issue key,Issue Type,Status,Summary,Created,Original Estimate,Remaining Estimate',
     'TRANS-1871,Bug,Resolved,functionality issue,2016-01-25T05:15:35.706+0000,32h,32h',
 ]
 
@@ -210,7 +210,7 @@ def test_issue_valid_url_argument_valid_key_estimates(runner, context, trans_187
 
 
 scrtreedev_project_output_list = [
-    'issuekey,type,status,created,start time,time spent',
+    'Issue key,Issue Type,Status,Created,Start Time,Time Spent',
     'SRCTREEDEV-221,bganninger,2015-11-20T21:14:00.000+0000,4d',
     'SRCTREEDEV-221,bganninger,2015-11-23T21:04:00.000+0000,8m',
     'SRCTREEDEV-221,bganninger,2015-11-23T21:05:00.000+0000,7h 52m',

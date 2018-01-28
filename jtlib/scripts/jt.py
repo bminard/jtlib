@@ -50,6 +50,7 @@ class CatchExceptions(click.Group):
 @click.argument('jira_server_url')
 @click.pass_context
 def jt(ctx, jira_server_url):
+    """JIRA_SERVER_URL must reference a JIRA server."""
     ctx.obj['jira client'] = jtlib.client.Jira(jira_server_url)
 
 

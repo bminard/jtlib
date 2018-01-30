@@ -28,6 +28,8 @@ This version of `jt` achieves this goal except as follows.
   1. missing attributes are assigned a _not available_ value
   2. attribute values are encoded as ASCII using backslashes
 
+If the JIRA server requries user authentication, add your credentials to the _.netrc_ file.
+
 # Using
 
 ## Projects

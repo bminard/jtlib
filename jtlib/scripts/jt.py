@@ -48,10 +48,26 @@ class CatchExceptions(click.Group):
 
 @click.group(cls = CatchExceptions)
 @click.argument('jira_server_url')
+@click.option('--basic-auth', type = (unicode, unicode), default = (None, None),
+    help = 'Provide username and password credentials for use with basic auth.')
 @click.pass_context
-def jt(ctx, jira_server_url):
-    """JIRA_SERVER_URL must reference a JIRA server."""
-    ctx.obj['jira client'] = jtlib.client.Jira(jira_server_url)
+def jt(ctx, jira_server_url, basic_auth):
+    """JIRA_SERVER_URL must reference a JIRA server.
+
+    The BASIC-AUTH option is used to specify a user name and password. These
+    credentials are used to authenticate to JIRA servers relying on the basic
+    authentication mechanism for log in.
+
+    The BASIC-AUTH option takes an argument of the form.
+
+                         --basic-auth username password
+
+    Alternatively, specify authentication credentials in the ~/.netrc file.
+    """
+    if basic_auth:
+        ctx.obj['jira client'] = jtlib.client.Jira(jira_server_url, basic_auth = basic_auth)
+    else:
+        ctx.obj['jira client'] = jtlib.client.Jira(jira_server_url)
 
 
 jt.add_command(jtlib.projects.main, name = 'projects')

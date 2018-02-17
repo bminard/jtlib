@@ -35,9 +35,11 @@
 all: test install
 
 
+TIMESTAMP=timestamp.init
 .PHONY: init
-init:
-	pip install -r requirements.txt
+init: ${TIMESTAMP}
+${TIMESTAMP}: requirements.txt
+	pip install -r $^ && touch $@
 
 
 .PHONY: install

@@ -1,3 +1,6 @@
+# -*-coding:Utf-8 -*
+
+
 #--------------------------------------------------------------------------------
 # jtlib: __init__.py
 #
@@ -31,7 +34,7 @@
 #--------------------------------------------------------------------------------
 
 
-from client import *
-from issue import *
-from projects import *
-from scripts import *
+from jtlib.client import *
+from jtlib.issue import *
+from jtlib.projects import *
+from jtlib.scripts import *

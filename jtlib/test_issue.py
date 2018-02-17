@@ -1,3 +1,6 @@
+# -*-coding:Utf-8 -*
+
+
 #--------------------------------------------------------------------------------
 # jtlib: test_issue.py
 #
@@ -33,7 +36,7 @@
 
 from click.testing import CliRunner
 import click
-import issue
+import jtlib.issue as issue
 import jtlib
 import pytest
 
@@ -108,6 +111,7 @@ def key(request):
 
 trans_project_output_list = [
     'TRANS-2421,Task,Resolved,Create a script that finds all English i18n files and merges them into 1 big JIRA properties file,2017-06-29T03:59:55.237+0000,N/A,17h',
+    'TRANS-2131,Bug,Resolved,New versions of JIRA-Software isnt appering in Português do Brasil,2016-05-12T00:45:51.793+0000,N/A,N/A', # UTF-8 test string.
     'TRANS-1898,Bug,Resolved,Grails-3: Some characters are encoded on product import popup,2016-02-05T15:00:20.533+0000,N/A,N/A',
     'TRANS-1871,Bug,Resolved,functionality issue,2016-01-25T05:15:35.706+0000,32h,32h',
 ]

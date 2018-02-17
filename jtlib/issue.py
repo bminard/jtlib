@@ -1,3 +1,6 @@
+# -*-coding:Utf-8 -*
+
+
 #--------------------------------------------------------------------------------
 # jtlib: issue.py
 #
@@ -46,7 +49,7 @@ issue_key_regex = re.compile(r"""(?P<issue_key>^[A-Z][A-Z]+-\d+)$""") # Default 
 def get_attribute_value(field, attribute):
     """Recursively traverse the tuple list for accessing an attribute's value.
     """
-    if types.TupleType == type(field):
+    if tuple == type(field):
         return get_attribute_value(get_attribute_value(field[0], field[1]), attribute)
     return getattr(field, attribute)
 
@@ -54,7 +57,10 @@ def get_attribute_value(field, attribute):
 def canonify_value(field, attribute):
     """Inject 'Not Available' value for nonexistent issue fields."""
     try:
-        return get_attribute_value(field, attribute).encode('ascii', errors='backslashreplace')
+        value = get_attribute_value(field, attribute)
+        if None == value:
+            return 'N/A'
+        return value
     except (AttributeError, TypeError):
         return 'N/A'
 

@@ -11,7 +11,7 @@ Use `jt` to access a JIRA server from the command-line.
 # Install
 
 Clone the project from [GitHub](https://github.com/bminard/jtlib).
-Run::
+Run:
 
  > python setup.py install
 

@@ -15,6 +15,10 @@ Run:
 
  > python setup.py install
 
+Or run the Make file:
+
+ > make init install
+
 # Running
 
 Run `jt` without any arguments to obtain help.

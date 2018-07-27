@@ -85,9 +85,7 @@ def emit_issue_fields(ctx, issue_list):
 def emit_worklog_fields(ctx, issue_list):
     """Print worklog fields."""
     writer = csv.writer(sys.stdout)
-    writer.writerow([ 'Issue key', 'Issue Type', 'Status', 'Created', 'Start Time',
-        'Time Spent',
-    ])
+    writer.writerow([ 'Issue key', 'Author', 'Started', 'Time Spent', ])
     for issue in issue_list:
         assert isinstance(issue, jira.resources.Issue)
         for worklog in ctx.obj['jira client'].issue(issue.key).fields.worklog.worklogs:

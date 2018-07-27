@@ -43,7 +43,7 @@ ${TIMESTAMP}: requirements.txt
 
 
 .PHONY: install
-install: sdist wheel
+install: sdist
 	python setup.py install
 
 

@@ -47,6 +47,11 @@ class InvalidUrl(Exception):
     pass
 
 
+class JiraServerError(Exception):
+    """Exception identifying a JIRA (remote) server error."""
+    pass
+
+
 class Jira(object):
     """Encapsulate JIRA client instantiation."""
 

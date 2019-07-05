@@ -94,7 +94,7 @@ def test_canonify_value_when_attribute_do_not_exist():
 def test_issue_valid_url_argument_invalid_key(runner, context):
     """Check issue group command result when an invalid key is provided."""
     result = runner.invoke(jtlib.scripts.jt, [ 'https://jira.atlassian.com', 'issue', '123' ], obj = context)
-    assert -1 == result.exit_code
+    assert 1 == result.exit_code
     assert result.output.find('Usage')
 
 
@@ -158,7 +158,7 @@ def time_option(request):
 def test_issue_valid_url_argument_valid_key_invalid_time_stamp(runner, context, key, time_option):
     """Check issue group command when an invalid time stamp is provided."""
     result = runner.invoke(jtlib.scripts.jt, [ 'https://jira.atlassian.com', 'issue', key, time_option, '2018-14-01' ], obj = context)
-    assert -1 == result.exit_code
+    assert 1 == result.exit_code
 
 
 def test_issue_valid_url_argument_valid_key_valid_time_stamp(runner, context, key, time_option):

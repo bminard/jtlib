@@ -215,24 +215,25 @@ def test_issue_valid_url_argument_valid_key_estimates(runner, context, trans_187
     assert trans_1871_expected_output in result.output
 
 
-scrtreedev_project_output_list = [
-    'Issue key,Issue Type,Status,Created,Start Time,Time Spent',
-    'SRCTREEDEV-221,bganninger,2015-11-20T21:14:00.000+0000,4d',
-    'SRCTREEDEV-221,bganninger,2015-11-23T21:04:00.000+0000,8m',
-    'SRCTREEDEV-221,bganninger,2015-11-23T21:05:00.000+0000,7h 52m',
+# FIXME: These tests are prone to breaking because they depend upon access to live data.
+cruc_project_output_list = [
+    'Issue key,Author,Started,Time Spent',
+    'CRUC-8403,mtokarski@atlassian.com,2019-06-10T09:17:29.129+0000,2m',
+    'CRUC-8403,mparfianowicz,2019-06-11T08:53:51.567+0000,30m'
+
 ]
 
 
-@pytest.fixture(scope = 'module', params = scrtreedev_project_output_list)
-def scrtreedev_project_expected_output(request):
+@pytest.fixture(scope = 'module', params = cruc_project_output_list)
+def cruc_project_expected_output(request):
     return request.param
 
 
-def test_issue_valid_url_argument_valid_key_worklog(runner, context, scrtreedev_project_expected_output):
+def test_issue_valid_url_argument_valid_key_worklog(runner, context, cruc_project_expected_output):
     """Check issue group command when an invalid time stamp is provided."""
-    result = runner.invoke(jtlib.scripts.jt, [ 'https://jira.atlassian.com', 'issue', '--worklog', 'SRCTREEDEV-221', ], obj = context)
+    result = runner.invoke(jtlib.scripts.jt, [ 'https://jira.atlassian.com', 'issue', '--worklog', 'CRUC-8403', ], obj = context)
     assert 0 == result.exit_code
-    assert scrtreedev_project_expected_output in result.output
+    assert cruc_project_expected_output in result.output
 
 
 #

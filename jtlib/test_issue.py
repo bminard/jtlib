@@ -167,27 +167,29 @@ def test_issue_valid_url_argument_valid_key_valid_time_stamp(runner, context, ke
     assert 0 == result.exit_code
 
 
+# FIXME: These tests are prone to breaking because they depend upon access to live data.
 @pytest.fixture(scope = 'module')
-def stride_project_result(runner, context):
-    return runner.invoke(jtlib.scripts.jt, [ 'https://jira.atlassian.com', 'issue', 'STRIDE', '--since', '2018-01-01', '--until', '2018-01-02' ], obj = context)
+def bamboo_project_result(runner, context):
+    return runner.invoke(jtlib.scripts.jt, [ 'https://jira.atlassian.com', 'issue', 'BAM', '--since', '2018-01-02', '--until', '2018-01-03' ], obj = context)
 
 
-stride_project_output_list = [
+bamboo_project_output_list = [
     'Issue key,Issue Type,Status,Summary,Created,Original Estimate,Remaining Estimate',
-    'STRIDE-1786,Suggestion,To be reviewed,Google Calendar Integration,2018-01-01T19:53:30.305+0000,N/A,N/A',
-    'STRIDE-1784,Suggestion,To be reviewed,Check post,2018-01-01T11:47:52.366+0000,N/A,N/A',
+    'BAM-19597,Bug,Open,Stopping build does not remove file locks,2018-01-02T15:48:51.377+0000,N/A,N/A',
+    'BAM-19596,Bug,Resolved,Live activity log entry count drop-down wrongly displays a decimal place,2018-01-02T02:46:52.898+0000,N/A,N/A'
+
 ]
 
 
-@pytest.fixture(scope = 'module', params = stride_project_output_list)
-def stride_project_expected_output(request):
+@pytest.fixture(scope = 'module', params = bamboo_project_output_list)
+def bamboo_project_expected_output(request):
     return request.param
 
 
-def test_issue_valid_url_argument_valid_project_valid_time_stamp_range(stride_project_result, stride_project_expected_output):
+def test_issue_valid_url_argument_valid_project_valid_time_stamp_range(bamboo_project_result, bamboo_project_expected_output):
     """Check issue group command when an invalid time stamp is provided."""
-    assert 0 == stride_project_result.exit_code
-    assert stride_project_expected_output in stride_project_result.output
+    assert 0 == bamboo_project_result.exit_code
+    assert bamboo_project_expected_output in bamboo_project_result.output
 
 
 #
@@ -239,7 +241,7 @@ def test_issue_valid_url_argument_valid_key_worklog(runner, context, scrtreedev_
 
 
 order_by_list = [
-    'https://jira.atlassian.com', 'issue', 'STRIDE', '--since', '2018-01-01', '--until', '2018-01-02',
+    'https://jira.atlassian.com', 'issue', 'BAM', '--since', '2018-01-02', '--until', '2018-01-03',
 ]
 
 
